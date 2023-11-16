@@ -7,27 +7,30 @@ from PIL import ImageTk, Image
 
 set_appearance_mode("Dark")
 set_default_color_theme("blue")
-appWidth, appHeight = 1000, 1300
+appWidth, appHeight = 1000, 1000
 
 
-class App(customtkinter.CTk):
+class GUI(customtkinter.CTk):
+    """
+    A class to design the graphic interface
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.title("Food App")
+        self.title("Generator przepisów kulinarnych")
         self.geometry(f"{appWidth}x{appHeight}")
 
         # img = ImageTk.PhotoImage(Image.open(""))
         # l1 = CTkLabel(master=app, image=img)
         # l1.pack()
         #
-        # View Tab
+        # add View Tab
         self.viewTab = CTkTabview(self)
         self.viewTab.grid(padx=200, pady=10, sticky="e")
         self.viewTab.add("Śniadanie")
         self.viewTab.add("Obiad")
         self.viewTab.add("Kolacja")
 
-        # Tab. 1 - śniadanie
+        # add Tab. 1 - śniadanie
         self.platki_btn = CTkButton(self.viewTab.tab("Śniadanie"),
                                     text="Płatki", command=self.platki_btn)
         self.platki_btn.grid(padx=80, pady=20, sticky="sw")
@@ -45,7 +48,7 @@ class App(customtkinter.CTk):
                                     text="Placki", command=self.placki_btn)
         self.placki_btn.grid(padx=80, pady=35, sticky="sw")
 
-        # Tab 2 - obiad
+        # add Tab 2 - obiad
         self.losos_btn = CTkButton(self.viewTab.tab("Obiad"),
                                    text="Łosoś", command=self.losos_btn)
         self.losos_btn.grid(padx=80, pady=20, sticky="sw")
@@ -62,7 +65,7 @@ class App(customtkinter.CTk):
                                   text="Wieprzowina", command=self.pork_btn)
         self.pork_btn.grid(padx=80, pady=35, sticky="sw")
 
-        # Tab. 3 - kolacja
+        # add Tab. 3 - kolacja
         self.light_btn = CTkButton(self.viewTab.tab("Kolacja"),
                                    text="Lekka kolacja", command=self.light_btn)
         self.light_btn.grid(padx=80, pady=20, sticky="sw")
@@ -72,9 +75,12 @@ class App(customtkinter.CTk):
                                   command=self.warm_btn)
         self.warm_btn.grid(padx=80, pady=25, sticky="sw")
 
-        self.recipe_text = CTkTextbox(self, width=800, height=800)
+        # add recipe text box
+        self.recipe_text = CTkTextbox(self, width=800, height=650)
         self.recipe_text.grid(row=7, column=0, columnspan=4, padx=20, pady=20,
                               sticky="nsew")
+
+    # define button commands
 
     def platki_btn(self):
         urls = ["https://www.kwestiasmaku.com/przepis/musli-z-jablkiem",
@@ -93,24 +99,29 @@ class App(customtkinter.CTk):
         przygotowanie = soup.find("div", class_="field field-name-field-"
                                                 "przygotowanie field-type-text-"
                                                 "long field-label-above")
-        # skladniki_1 = soup.find(soup.find("div", class_="recipe--"
-        #                                                 "ingredients--list"))
-        # przygotowanie_1 = soup.find("div", class_="recipeStepsComponent")
 
         self.recipe_text.delete("1.0", "end")
         scraped = ' '.join(element.get_text() for element in przygotowanie)
         self.recipe_text.insert("1.0", scraped)
         scraped_text = ' '.join(element.get_text() for element in skladniki)
         self.recipe_text.insert("1.0", scraped_text)
-        # scraped_1 = ' '.join(element.get_text() for element in przygotowanie_1)
+
+        # for another website
+        # skladniki_1 = soup.find(soup.find("div", class_="recipe--"
+        #                                                 "ingredients--list"))
+        # przygotowanie_1 = soup.find("div", class_="recipeStepsComponent")
+        # scraped_1 = ' '.join(element.get_text() for element in
+        # przygotowanie_1)
         # self.recipe_text.insert("1.0", scraped_1)
-        # scraped_text_1 = ' '.join(element.get_text() for element in skladniki_1)
+        # scraped_text_1 = ' '.join(element.get_text() for element in
+        # skladniki_1)
         # self.recipe_text.insert("1.0", scraped_text_1)
 
         # debug
         # print(scraped_text)
         # print(scraped)
 
+    # add buttons functionality
     def jajka_btn(self):
         urls = [
             "https://www.kwestiasmaku.com/przepis/pasztet-jajeczny",
@@ -171,6 +182,7 @@ class App(customtkinter.CTk):
         przygotowanie = soup.find("div", class_="field field-name-field-"
                                                 "przygotowanie field-type-text-"
                                                 "long field-label-above")
+
         self.recipe_text.delete("1.0", "end")
         scraped = ' '.join(element.get_text() for element in przygotowanie)
         self.recipe_text.insert("1.0", scraped)
@@ -314,6 +326,13 @@ class App(customtkinter.CTk):
         self.recipe_text.insert("1.0", scraped_text)
 
 
+class FoodApp(GUI):
+    """
+    a class that builds the app based on the design of teh class
+    """
+    def build(self):
+        return GUI()
+
+
 if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    FoodApp().mainloop()
