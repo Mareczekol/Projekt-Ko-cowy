@@ -1,3 +1,5 @@
 .idea/
 exaples.py
-git add
+app.py
+__pycache__/
+przepis.txt
