@@ -20,7 +20,7 @@ class TestMyApp(unittest.TestCase):
         gui = app.build()
         widgets = gui.children
         self.assertIsNotNone(widgets)
-        self.assertEqual(len(widgets), 2)
+        self.assertEqual(len(widgets), 3)
 
         for i in widgets:
             self.assertIsNotNone(i)
